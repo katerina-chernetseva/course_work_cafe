@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.coursework.Common.Common;
 import com.example.coursework.Model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,20 +43,25 @@ public class SignIn extends AppCompatActivity {
             public void onClick(View v) {
 
                 final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
-                mDialog.setMessage("Пожалуйста, подождите!");
+                mDialog.setMessage("Пожалуйста, подождите");
                 mDialog.show();
 
-                table_user.addValueEventListener(new ValueEventListener() {
+                table_user.addValueEventListener(new ValueEventListener()
+                {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
                         if(dataSnapshot.child(editPhone.getText().toString()).exists()) {
 
                             mDialog.dismiss();
                             User user = dataSnapshot.child(editPhone.getText().toString()).getValue(User.class);
-                            assert user != null;
+                            //System.out.println(user.getName());
                             if (user.getPassword().equals(editPassword.getText().toString())) {
-                                Toast.makeText(SignIn.this, "Вход успешно осуществлён!", Toast.LENGTH_SHORT).show();
+                                Intent homeIntent = new Intent(SignIn.this,Home.class);
+                                Common.currentUser=user;
+                                startActivity(homeIntent);
+                                finish();
+
                             } else {
                                 Toast.makeText(SignIn.this, "Введён неверный пароль!", Toast.LENGTH_SHORT).show();
                             }
@@ -66,7 +73,7 @@ public class SignIn extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
