@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signUP = new Intent(MainActivity.this, SignUp.class);
                 startActivity(signUP);
+                android.content.Intent view = new Intent();
+                view.setAction(Intent.ACTION_VIEW);
+                view.setData(android.net.Uri.parse(0));
+                startActivity(view);
             }
         });
 
